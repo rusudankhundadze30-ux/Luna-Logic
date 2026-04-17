@@ -6,9 +6,9 @@ from datetime import datetime
 import pytz
 import math
 
-# ─────────────────────────────────────────────
-# STEP 1: GET USER INPUT
-# ─────────────────────────────────────────────
+
+# User input
+
 
 print("=== BIRTH CHART CALCULATOR ===\n")
 
@@ -23,9 +23,9 @@ hour, minute = [int(x) for x in birth_time_str.split(":")]
 
 print(f"\nLooking up coordinates for: {birth_place}...")
 
-# ─────────────────────────────────────────────
-# STEP 2: GET COORDINATES & LOCAL TIME OFFSET
-# ─────────────────────────────────────────────
+
+# Get coordinates
+
 
 geolocator = Nominatim(user_agent="birth_chart_app")
 location = geolocator.geocode(birth_place)
@@ -54,9 +54,9 @@ ut_hour = utc_dt.hour + utc_dt.minute / 60.0  # Universal Time as decimal
 print(f"Timezone: {timezone_str}")
 print(f"UTC time: {utc_dt.strftime('%H:%M')} | UT decimal: {ut_hour:.4f}")
 
-# ─────────────────────────────────────────────
-# STEP 3: JULIAN DAY NUMBER (JDN) CALCULATION
-# ─────────────────────────────────────────────
+
+#  JULIAN DAY NUMBER (JDN) CALCULATION
+
 # Formula: standard astronomical Julian Day Number
 
 Y = utc_dt.year
@@ -75,9 +75,9 @@ JDN += ut_hour / 24.0  # Add fractional day for time
 
 print(f"\nJulian Day Number (JDN): {JDN:.6f}")
 
-# ─────────────────────────────────────────────
-# STEP 4: CALCULATE SUN LONGITUDE (Approximate)
-# ─────────────────────────────────────────────
+
+# CALCULATE SUN LONGITUDE (Approximate)
+
 # Source: Jean Meeus "Astronomical Algorithms" simplified
 
 T = (JDN - 2451545.0) / 36525.0  # Julian centuries from J2000.0
@@ -106,9 +106,9 @@ print(f"Mean Anomaly M: {M_sun:.4f}°")
 print(f"Equation of Center C: {C:.4f}°")
 print(f"Sun True Longitude: {sun_longitude:.4f}°")
 
-# ─────────────────────────────────────────────
-# STEP 5: CALCULATE MOON LONGITUDE (Approximate)
-# ─────────────────────────────────────────────
+
+#  CALCULATE MOON LONGITUDE (Approximate)
+
 
 # Moon's mean longitude
 Lm = 218.3165 + 481267.8813 * T
@@ -141,9 +141,9 @@ print(f"Moon Mean Anomaly Mm: {Mm:.4f}°")
 print(f"Perturbation ΔL: {delta_L:.4f}°")
 print(f"Moon True Longitude: {moon_longitude:.4f}°")
 
-# ─────────────────────────────────────────────
-# STEP 6: CALCULATE ASCENDANT (Rising Sign)
-# ─────────────────────────────────────────────
+
+#  CALCULATE ASCENDANT (Rising Sign)
+
 # Obliquity of the ecliptic
 epsilon = 23.439291 - 0.013004 * T
 epsilon_rad = math.radians(epsilon)
@@ -170,9 +170,8 @@ ascendant = math.degrees(math.atan2(numerator, denominator)) % 360
 
 print(f"Ascendant Longitude: {ascendant:.4f}°")
 
-# ─────────────────────────────────────────────
-# STEP 7: DETERMINE ZODIAC SIGNS
-# ─────────────────────────────────────────────
+#  DETERMINE ZODIAC SIGNS
+
 
 zodiac_signs = [
     (0,   "Aries"),
@@ -203,9 +202,9 @@ sun_sign    = get_sign(sun_longitude)
 moon_sign   = get_sign(moon_longitude)
 rising_sign = get_sign(ascendant)
 
-# ─────────────────────────────────────────────
-# STEP 8: DETERMINE ELEMENT & MODALITY
-# ─────────────────────────────────────────────
+
+# DETERMINE ELEMENT & MODALITY
+
 
 elements = {
     "Aries": "Fire", "Leo": "Fire", "Sagittarius": "Fire",
@@ -225,9 +224,9 @@ moon_element   = elements[moon_sign]
 rising_element = elements[rising_sign]
 sun_modality   = modalities[sun_sign]
 
-# ─────────────────────────────────────────────
-# STEP 9: DETERMINE DOMINANT ELEMENT
-# ─────────────────────────────────────────────
+
+# DETERMINE DOMINANT ELEMENT
+
 
 element_counts = {"Fire": 0, "Earth": 0, "Air": 0, "Water": 0}
 for el in [sun_element, moon_element, rising_element]:
@@ -235,9 +234,9 @@ for el in [sun_element, moon_element, rising_element]:
 
 dominant_element = max(element_counts, key=element_counts.get)
 
-# ─────────────────────────────────────────────
-# STEP 10: PRINT BIRTH CHART
-# ─────────────────────────────────────────────
+
+# PRINT BIRTH CHART
+
 
 print(f"\n{'='*45}")
 print(f"  BIRTH CHART FOR: {name.upper()}")
@@ -251,9 +250,9 @@ print(f"  Modality    : {sun_modality}")
 print(f"  Dominant    : {dominant_element}")
 print(f"{'='*45}")
 
-# ─────────────────────────────────────────────
-# STEP 11: PERSONALITY + CAREER TRAITS
-# ─────────────────────────────────────────────
+
+#  PERSONALITY + CAREER TRAITS
+
 
 sign_traits = {
     "Aries":       "bold, competitive, quick to act, natural leader",
