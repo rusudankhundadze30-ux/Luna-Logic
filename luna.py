@@ -1,7 +1,4 @@
-#project 1
-# Birth Chart Calculator
-# Required installs (run once in terminal):
-#   pip install geopy timezonefinder pytz
+
 
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
